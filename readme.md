@@ -1,14 +1,17 @@
 # Sobre
 
-Neste repositório vamos fazer a criação de uma imagem Docker que embora possa ser utilizada em produção, ainda merece ser aperfeiçoada para permitir realmente o escalonamento da aplicação.
+O projeto em questão se trata de uma aplicação de API para uma pastelaria, que será desenvolvida utilizando as tecnologias Laravel, Docker e MySQL. O Laravel é um framework de aplicação web PHP que oferece uma série de recursos e funcionalidades que tornam o desenvolvimento mais fácil e rápido. O Docker é uma plataforma de virtualização de contêineres que permite empacotar e distribuir aplicativos em contêineres independentes, garantindo a consistência do ambiente de desenvolvimento e produção. O MySQL é um sistema gerenciador de banco de dados relacional que será utilizado para armazenar os dados da aplicação.
+
+Com o uso dessas tecnologias, será possível desenvolver uma aplicação moderna e escalável que ofereça uma API robusta para a pastelaria. A aplicação poderá ser facilmente implantada e escalada usando o Docker, e o Laravel fornecerá uma base sólida para o desenvolvimento rápido e eficiente da API. O MySQL fornecerá um sistema de gerenciamento de banco de dados confiável e escalável para a aplicação.
+
+# 1º Passo
+Entre no diretorio app e faça uma copia do arquivo arquivo <b>.env.example</b> e nomei essa copia para <b>.env</b>
 
 # Conteúdo da Imagem Docker
 
-- <b>PHP</b>, e diversas extensões e Libs do PHP, incluindo php-redis, pgsql, mysql, entre outras.
+- <b>PHP</b>, e diversas extensões e Libs do PHP, incluindo mysql, entre outras.
 
 - <b>Nginx</b>, como proxy reverso/servidor. Por fim de testes é que o Nginx está presente nesta imagem, em um momento de otimização está imagem deixará de ter o Nginx.
-
-- <b>Supervisor</b>, indispensal para executarmos a aplicação PHP e permitir por exemplo a execução de filas e jobs.
 
 - <b>Composer</b>, afinal de contas é preciso baixar as dependências mais atuais toda vez que fomos crontruir uma imagem Docker.
 
