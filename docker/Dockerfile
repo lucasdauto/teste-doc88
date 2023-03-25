@@ -4,6 +4,9 @@ FROM php:${PHP_VERSION}
 ## Diretório da aplicação
 ARG APP_DIR=/var/www/app
 
+## Versão da Lib do Redis para PHP
+ARG REDIS_LIB_VERSION=5.3.7
+
 ### apt-utils é um extensão de recursos do gerenciador de pacotes APT
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     apt-utils \ 
@@ -26,7 +29,6 @@ RUN docker-php-ext-install zip iconv simplexml pcntl gd fileinfo
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./docker/supervisord/conf /etc/supervisord.d/
 
 COPY ./docker/php/extra-php.ini "$PHP_INI_DIR/99_extra.ini"
 COPY ./docker/php/extra-php-fpm.conf /etc/php8/php-fpm.d/www.conf
