@@ -14,10 +14,9 @@ class CustomerControllerTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic feature test example.
      * @test
      */
-    public function test_customer_get_endpoint(): void
+    public function test_get_customer_endpoint(): void
     {
         $customer = Customer::factory(3)->create();
 
@@ -25,8 +24,20 @@ class CustomerControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonCount(3);
-        $response->assertJson(function (AssertableJson $json) {
+        $response->assertJson(function (AssertableJson $json) use ($customer) {
             for ($i = 0; $i < 3; $i++) {
+                $json->hasAll([
+                    "{$i}.id",
+                    "{$i}.name",
+                    "{$i}.email",
+                    "{$i}.phone",
+                    "{$i}.birthdate",
+                    "{$i}.address",
+                    "{$i}.neighborhood",
+                    "{$i}.city",
+                    "{$i}.zip_code",
+                ]);
+
                 $json->whereAllType([
                     "{$i}.id" => "integer",
                     "{$i}.name" => "string",
@@ -37,13 +48,107 @@ class CustomerControllerTest extends TestCase
                     "{$i}.complement" => "string|null",
                     "{$i}.neighborhood" => "string",
                     "{$i}.city" => "string",
-                    "{$i}.zip_code"=> "string"
+                    "{$i}.zip_code" => "string"
                 ]);
 
                 $json->where("{$i}.birthdate", function ($value) {
                     return (new \DateTime($value))->format("Y-m-d") === $value;
                 });
+
+                $customer = $customer->first();
+
+                $json->whereAll([
+                    "0.id" => $customer->id,
+                    "0.name" => $customer->name,
+                    "0.email" => $customer->email,
+                    "0.phone" => $customer->phone,
+                    "0.birthdate" => $customer->birthdate,
+                    "0.address" => $customer->address,
+                    "0.complement" => $customer->complement,
+                    "0.neighborhood" => $customer->neighborhood,
+                    "0.city" => $customer->city,
+                    "0.zip_code" => $customer->zip_code
+                ]);
             }
+        });
+    }
+
+    public function test_get_single_custumer_endpoint()
+    {
+        $customer = Customer::factory(1)->createOne();
+
+        $response = $this->getJson("/api/customers/" . $customer->id);
+
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($customer) {
+
+            $json->hasAll([
+                "id",
+                "name",
+                "email",
+                "phone",
+                "birthdate",
+                "address",
+                "neighborhood",
+                "city",
+                "zip_code",
+                "complement",
+                "created_at",
+                "updated_at",
+            ]);
+
+            $json->whereAllType([
+                "id" => "integer",
+                "name" => "string",
+                "email" => "string",
+                "phone" => "string",
+                "birthdate" => "string",
+                "address" => "string",
+                "neighborhood" => "string",
+                "city" => "string",
+                "complement" => "string|null",
+                "zip_code" => "string",
+            ]);
+
+            $json->whereAll([
+                "id" => $customer->id,
+                "name" => $customer->name,
+                "email" => $customer->email,
+                "phone" => $customer->phone,
+                "birthdate" => $customer->birthdate,
+                "address" => $customer->address,
+                "neighborhood" => $customer->neighborhood,
+                "city" => $customer->city,
+                "zip_code" => $customer->zip_code,
+            ]);
+
+
+        });
+    }
+
+    public function test_create_customer_post_endpoint(): void
+    {
+        $customer = Customer::factory(1)->makeOne()->toArray();
+
+        $response = $this->postJson('/api/customers', $customer);
+
+        $response->assertStatus(201);
+
+        $response->assertJson(function (AssertableJson $json) use ($customer) {
+
+            $json->whereAll([
+                "id" => $customer['id'],
+                "name" => $customer['name'],
+                "email" => $customer['email'],
+                "phone" => $customer['phone'],
+                "birthdate" => $customer['birthdate'],
+                "address" => $customer['address'],
+                "neighborhood" => $customer['neighborhood'],
+                "city" => $customer['city'],
+                "zip_code" => $customer['zip_code'],
+                "complement" => $customer['complement'],
+            ]);
         });
     }
 }
