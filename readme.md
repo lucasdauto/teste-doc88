@@ -5,7 +5,25 @@ O projeto em questão se trata de uma aplicação de API para uma pastelaria, qu
 Com o uso dessas tecnologias, será possível desenvolver uma aplicação moderna e escalável que ofereça uma API robusta para a pastelaria. A aplicação poderá ser facilmente implantada e escalada usando o Docker, e o Laravel fornecerá uma base sólida para o desenvolvimento rápido e eficiente da API. O MySQL fornecerá um sistema de gerenciamento de banco de dados confiável e escalável para a aplicação.
 
 # 1º Passo
-Entre no diretorio app e faça uma copia do arquivo arquivo <b>.env.example</b> e nomei essa copia para <b>.env</b>
+Entre no diretorio app e faça uma copia do arquivo arquivo `.env.example` e nomei essa copia para `.env`
+
+```sh
+cp app/.env.example app/.env
+```
+
+Depois copie as variaveis de banco que estão no arquivo `docker-compose.yml` para a parte do arquivo `.env` onde são inseridas as variaveis de banco.
+
+# 2° Passo
+Dentro da pasta `app` execute o comando no terminal:
+
+```sh
+composer install
+```
+
+E em seguida para nos certificarmos que não haverá nenhum erro durante o processo de build:
+```sh
+php artisan key:generate
+```
 
 # Conteúdo da Imagem Docker
 
@@ -29,21 +47,9 @@ docker ps
 docker compose version
 ```
 
-## Clone sua aplicação Laravel para a pasta 'app'. Caso a pasta app não existe, crie a pasta.
+### Certifique-se que sua aplicação Laravel ficou em `./app` e que existe o seguinte caminho: `/app/public/index.php`
 
-A listagem de pastas do projeto deve ficar:
-
-```
-    app/
-    docker/
-    .gitignore
-    docker-compose.yml
-    readme.md
-```
-
-## Certifique-se que sua aplicação Laravel ficou em `./app` e que existe o seguinte caminho: `/app/public/index.php`
-
-## Certifique-se que sua aplicação Laravel possuí um .env e que este .env está com a `APP_KEY=` definida com valor válido.
+### Certifique-se que sua aplicação Laravel possuí um .env e que este .env está com a `APP_KEY=` definida com valor válido.
 
 ## Contruir a imagem Docker, execute:
 
@@ -67,6 +73,11 @@ docker compose up
 
 ```sh
 docker compose up -d
+```
+
+- Caso deseje rodar tudo de uma vez só realize o seguinte comando:
+```sh
+docker compose up -d --build
 ```
 
 ## Para derrubar a aplicação, execute:
