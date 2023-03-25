@@ -7,16 +7,19 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+    protected $customer;
+    function __construct(Customer $customer)
+    {
+        $this->customer = $customer;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json([
-            ["id" => 1, "name" => "John Doe"],
-            ["id" => 2, "name" => "Jane Doe"],
-            ["id" => 3, "name" => "Jack Doe"],
-        ], 200);
+        return response()->json($this->customer::all(), 200);
     }
 
     /**
