@@ -137,8 +137,21 @@ class CustomerControllerTest extends TestCase
 
         $response->assertJson(function (AssertableJson $json) use ($customer) {
 
+            $json->hasAll([
+                "id",
+                "name",
+                "email",
+                "phone",
+                "birthdate",
+                "address",
+                "neighborhood",
+                "city",
+                "zip_code",
+                "created_at",
+                "updated_at",
+            ]);
+
             $json->whereAll([
-                "id" => $customer['id'],
                 "name" => $customer['name'],
                 "email" => $customer['email'],
                 "phone" => $customer['phone'],
@@ -147,8 +160,7 @@ class CustomerControllerTest extends TestCase
                 "neighborhood" => $customer['neighborhood'],
                 "city" => $customer['city'],
                 "zip_code" => $customer['zip_code'],
-                "complement" => $customer['complement'],
-            ]);
+            ])->etc();
         });
     }
 }

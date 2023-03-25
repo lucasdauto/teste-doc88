@@ -8,10 +8,8 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
 
-    protected $customer;
-    function __construct(Customer $customer)
+    function __construct(private Customer $customer, private Request $request)
     {
-        $this->customer = $customer;
     }
 
     /**
@@ -25,23 +23,32 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        $customer = $this->customer::create($this->request->all());
+
+        if ($customer)
+            return response()->json($customer, 201);
+
+        return response()->json("Customer not created", 400);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show($customer_id)
     {
-        //
+        $customer = $this->customer::find($customer_id);
+        if ($customer)
+            return response()->json($customer, 200);
+
+        return response()->json("Customer not found", 404);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update()
     {
         //
     }
@@ -49,7 +56,7 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy()
     {
         //
     }
