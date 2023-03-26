@@ -3,7 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Customer;
-use \Illuminate\Foundation\Testing\DatabaseMigrations;
+use DateTime;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -52,7 +53,7 @@ class CustomerControllerTest extends TestCase
                 ]);
 
                 $json->where("{$i}.birthdate", function ($value) {
-                    return (new \DateTime($value))->format("Y-m-d") === $value;
+                    return (new DateTime($value))->format("Y-m-d") === $value;
                 });
 
                 $customer = $customer->first();
