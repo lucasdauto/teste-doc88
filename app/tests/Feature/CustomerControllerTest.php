@@ -217,7 +217,7 @@ class CustomerControllerTest extends TestCase
         $customer = Customer::factory(1)->createOne();
         $id = $customer->id;
 
-        $response = $this->deleteJson('/api/customers/' . $customer->id);
+        $response = $this->deleteJson('/api/customers/' . $id);
         $response->assertStatus(204);
 
         $responseError = $this->getJson("/api/customers/" . $id);
