@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function store(CustomerRequest $customerRequest)
     {
-        $customer = $this->customer::create($this->request->all());
+        $customer = $this->customer::create($customerRequest->all());
 
         if ($customer)
             return response()->json($customer, 201);
@@ -48,11 +49,11 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id)
+    public function update($id, CustomerRequest $customerRequest)
     {
         $customer = $this->customer::find($id);
         if ($customer) {
-            $update = $customer->update($this->request->all());
+            $update = $customer->update($customerRequest->all());
             if ($update)
                 return response()->json($customer, 200);
 
@@ -68,7 +69,6 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = $this->customer::find($id);
-
         if ($customer) {
             $delete = $customer->delete();
             if ($delete)
