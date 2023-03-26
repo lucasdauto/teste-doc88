@@ -19,13 +19,13 @@ class CustomerControllerTest extends TestCase
      */
     public function test_get_customers_endpoint(): void
     {
-        $customer = Customer::factory(3)->create();
+        $customers = Customer::factory(3)->create(array('deleted_at' => null));
 
         $response = $this->getJson("/api/customers");
 
         $response->assertStatus(200);
         $response->assertJsonCount(3);
-        $response->assertJson(function (AssertableJson $json) use ($customer) {
+        $response->assertJson(function (AssertableJson $json) use ($customers) {
             for ($i = 0; $i < 3; $i++) {
                 $json->hasAll([
                     "{$i}.id",
@@ -37,7 +37,9 @@ class CustomerControllerTest extends TestCase
                     "{$i}.neighborhood",
                     "{$i}.city",
                     "{$i}.zip_code",
-                ]);
+                    "{$i}.created_at",
+                    "{$i}.updated_at",
+                ])->etc();
 
                 $json->whereAllType([
                     "{$i}.id" => "integer",
@@ -56,7 +58,7 @@ class CustomerControllerTest extends TestCase
                     return (new DateTime($value))->format("Y-m-d") === $value;
                 });
 
-                $customer = $customer->first();
+                $customer = $customers->first();
 
                 $json->whereAll([
                     "0.id" => $customer->id,
@@ -97,7 +99,7 @@ class CustomerControllerTest extends TestCase
                 "complement",
                 "created_at",
                 "updated_at",
-            ]);
+            ])->etc();
 
             $json->whereAllType([
                 "id" => "integer",
@@ -150,7 +152,7 @@ class CustomerControllerTest extends TestCase
                 "zip_code",
                 "created_at",
                 "updated_at",
-            ]);
+            ])->etc();
 
             $json->whereAll([
                 "name" => $customer['name'],
