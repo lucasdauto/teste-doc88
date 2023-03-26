@@ -203,4 +203,15 @@ class ProductControllerTest extends TestCase
         $responseError = $this->getJson("/api/products/" . $id);
         $responseError->assertStatus(404);
     }
+
+    public function test_softDelete_in_product()
+    {
+        $product = Product::factory(1)->createOne()->toArray();
+        $id = $product['id'];
+
+        $productQuery = Product::find($id);
+        $productQuery->delete();
+
+        $this->assertSoftDeleted($productQuery);
+    }
 }

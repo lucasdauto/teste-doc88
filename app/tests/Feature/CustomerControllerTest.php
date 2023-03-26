@@ -272,4 +272,15 @@ class CustomerControllerTest extends TestCase
         $responseError->assertStatus(404);
 
     }
+
+    public function test_softDelete_in_customer()
+    {
+        $customer = Customer::factory(1)->createOne()->toArray();
+        $id = $customer['id'];
+
+        $customerQuery = Customer::find($id);
+        $customerQuery->delete();
+
+        $this->assertSoftDeleted($customerQuery);
+    }
 }
