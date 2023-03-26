@@ -16,7 +16,7 @@ class CustomerControllerTest extends TestCase
     /**
      * @test
      */
-    public function test_get_customer_endpoint(): void
+    public function test_get_customers_endpoint(): void
     {
         $customer = Customer::factory(3)->create();
 
@@ -162,5 +162,54 @@ class CustomerControllerTest extends TestCase
                 "zip_code" => $customer['zip_code'],
             ])->etc();
         });
+    }
+
+    public function test_update_custumer_put_endpoint(): void
+    {
+
+        $customer = [
+          "name"=> "Marv",
+          "email"=> "mgower0@flickr.com",
+          "phone"=> "(829) 2239320",
+          "birthdate"=> "8/17/2022",
+          "address"=> "Anzinger",
+          "neighborhood"=> "Trail",
+          "city"=> "Grevená",
+          "zip_code"=> "54868-5664"
+        ];
+
+        $oldCustomer = Customer::factory(1)->createOne();
+
+        $response = $this->putJson('/api/customers/' . $oldCustomer->id, $customer);
+
+        $response->assertStatus(200);
+
+        $response->assertJson(function (AssertableJson $json) use ($customer, $oldCustomer) {
+            $json->hasAll([
+                "id",
+                "name",
+                "email",
+                "phone",
+                "birthdate",
+                "address",
+                "neighborhood",
+                "city",
+                "zip_code",
+                "created_at",
+                "updated_at",
+            ]);
+
+            $json->whereAll([
+                "name" => $customer["name"],
+                "email" => $customer["email"],
+                "phone" => $customer["phone"],
+                "birthdate" => $customer["birthdate"],
+                "address" => $customer["address"],
+                "neighborhood" => $customer["neighborhood"],
+                "city" => $customer["city"],
+                "zip_code" => $customer["zip_code"],
+            ])->etc();
+        });
+
     }
 }

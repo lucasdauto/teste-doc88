@@ -48,9 +48,18 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update()
+    public function update($id)
     {
-        //
+        $customer = $this->customer::find($id);
+        if ($customer) {
+            $update = $customer->update($this->request->all());
+            if ($update)
+                return response()->json($customer, 200);
+
+            return response()->json("Customer not updated", 400);
+        }
+
+        return response()->json("Customer not found", 404);
     }
 
     /**
