@@ -165,18 +165,29 @@ class CustomerControllerTest extends TestCase
         });
     }
 
-    public function test_update_custumer_put_endpoint(): void
+    public function test_post_should_validate_when_create_a_invalid_customer()
+    {
+        $response = $this->postJson('/api/customers', []);
+
+        $response->assertStatus(422);
+
+        $response->assertJson(function (AssertableJson $json) {
+            $json->hasAll(['message','errors']);
+        });
+    }
+
+    public function test_update_customer_put_endpoint(): void
     {
 
         $customer = [
           "name"=> "Marv",
           "email"=> "mgower0@flickr.com",
-          "phone"=> "(829) 2239320",
-          "birthdate"=> "8/17/2022",
+          "phone"=> "(29) 2239320",
+          "birthdate"=> "1990-01-01",
           "address"=> "Anzinger",
           "neighborhood"=> "Trail",
           "city"=> "Grevená",
-          "zip_code"=> "54868-5664"
+          "zip_code"=> "54868-564"
         ];
 
         $oldCustomer = Customer::factory(1)->createOne();
@@ -213,7 +224,41 @@ class CustomerControllerTest extends TestCase
         });
     }
 
-    public function test_delete_custumer_endpoint()
+    public function test_put_should_validate_when_update_a_invalid_customer()
+    {
+        $customer = [
+            "name"=> "Marv",
+            "email"=> "mgower0@flickr.com",
+            "phone"=> "(29) 2239320",
+            "birthdate"=> "01-01-1990",
+            "address"=> "Anzinger",
+            "neighborhood"=> "Trail",
+            "city"=> "Grevená",
+            "zip_code"=> "0054868-564"
+        ];
+
+        $oldCustomer = Customer::factory(1)->createOne()->toArray();
+
+        $response = $this->putJson('/api/customers/3', $oldCustomer);
+
+        $response->assertStatus(422);
+
+        $response = $this->putJson('/api/customers/' . $oldCustomer["id"], $customer);
+        $response->assertStatus(422);
+
+        $response->assertJson(function (AssertableJson $json) {
+            $json->hasAll(['message','errors']);
+        });
+
+        $response = $this->putJson('/api/customers/' . $oldCustomer["id"], []);
+        $response->assertStatus(422);
+
+        $response->assertJson(function (AssertableJson $json) {
+            $json->hasAll(['message','errors']);
+        });
+    }
+
+    public function test_delete_customer_endpoint()
     {
         $customer = Customer::factory(1)->createOne();
         $id = $customer->id;
