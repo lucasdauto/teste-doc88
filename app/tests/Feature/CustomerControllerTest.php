@@ -210,6 +210,18 @@ class CustomerControllerTest extends TestCase
                 "zip_code" => $customer["zip_code"],
             ])->etc();
         });
+    }
+
+    public function test_delete_custumer_endpoint()
+    {
+        $customer = Customer::factory(1)->createOne();
+        $id = $customer->id;
+
+        $response = $this->deleteJson('/api/customers/' . $customer->id);
+        $response->assertStatus(204);
+
+        $responseError = $this->getJson("/api/customers/" . $id);
+        $responseError->assertStatus(404);
 
     }
 }

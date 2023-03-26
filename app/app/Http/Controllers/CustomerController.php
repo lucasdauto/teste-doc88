@@ -65,8 +65,18 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy($id)
     {
-        //
+        $customer = $this->customer::find($id);
+
+        if ($customer) {
+            $delete = $customer->delete();
+            if ($delete)
+                return response()->json("Customer deleted", 204);
+
+            return response()->json("Customer not deleted", 400);
+        }
+
+        return response()->json("Customer not found", 404);
     }
 }
