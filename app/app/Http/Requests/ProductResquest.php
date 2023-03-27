@@ -24,7 +24,7 @@ class ProductResquest extends FormRequest
         return [
             'name' => 'required|string|max:40',
             'price' => 'required|numeric',
-            'photo' => 'required|string',
+            'photo' => 'required',
         ];
     }
 }
