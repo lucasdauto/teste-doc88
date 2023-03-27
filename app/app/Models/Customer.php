@@ -23,4 +23,9 @@ class Customer extends Model
         'zip_code',
         'complement',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'customer_id', 'id');
+    }
 }

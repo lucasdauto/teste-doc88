@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Customer;
+use App\Models\Order;
 use DateTime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -282,5 +283,16 @@ class CustomerControllerTest extends TestCase
         $customerQuery->delete();
 
         $this->assertSoftDeleted($customerQuery);
+    }
+
+    public function test_between_customer_and_order(): void
+    {
+        $order = Order::factory()->make();
+        $customer = Customer::first();
+        $customer->orders()->save($order);
+        $customer->refresh();
+
+        $this->assertTrue($customer->orders->contains($order));
+
     }
 }
