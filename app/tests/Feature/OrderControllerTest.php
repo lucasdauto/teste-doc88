@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class OrderControllerTest extends TestCase
@@ -123,7 +124,8 @@ class OrderControllerTest extends TestCase
 
         $response = $this->postJson('/api/orders', $order);
         $response->assertStatus(201);
+        $orderQuery = Order::with('orderItems')->find(1)->toArray();
 
-
+        $this->assertCount(2, $orderQuery['order_items']);
     }
 }
