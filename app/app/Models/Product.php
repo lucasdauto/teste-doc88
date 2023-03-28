@@ -18,7 +18,7 @@ class Product extends Model
         'photo',
     ];
 
-    public function ordersItems(){
-        return $this->hasOne(OrderItems::class);
+    public function orderItems(){
+        return $this->hasMany(OrderItems::class);
     }
 }
