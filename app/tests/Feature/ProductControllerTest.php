@@ -136,7 +136,7 @@ class ProductControllerTest extends TestCase
     {
         $product = [
             "name" => "Pastel de frango",
-            "price" => "5.50",
+            "price" => 5.50,
             "photo" => "https://picsum.photos/200/300"
         ];
         $oldProduct = Product::factory(1)->createOne()->toArray();
